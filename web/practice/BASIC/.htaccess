@@ -1,0 +1,4 @@
+AuthUserFile /var/www/html/practice/BASIC/.htpasswd
+AuthName "enter id and password(hoge hogee)"
+AuthType Basic
+require valid-user
