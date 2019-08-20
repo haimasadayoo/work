@@ -23,15 +23,4 @@ point
    これをdict型にparseするのは
    parse.parse_qs(txt)
    でdict型で帰ってくる
-   {"name":"tanaka", "age":15}
-
-calculator.py: URL?3+5+22 とかするやつ
-stocker.py: データベース管理を行うやつ
-addstock + name + (amount):在庫追加　amountの指定がない場合1個 在庫
-checkstock + (name): 在庫出力　名前指定ない場合すべて
-sell name (amount) (price): 販売　amountの指定がない場合1個 priceの指定がない場合無料
-checksales: 売上確認
-deleteall:すべて削除
-
-
-
+   {"
