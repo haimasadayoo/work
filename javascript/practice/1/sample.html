@@ -1,0 +1,25 @@
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>サンプル</title>
+    <script src="sample.js"></script>
+  </head>
+  <body>
+    <textarea name="text" id="txt1" cols="50" rows="10" value="e"></textarea>
+
+    <input type="button" value="漢字だけにする" onclick="getValue('txt1');">
+    <br><br><br>歌詞取得(試用) うたマップから歌詞を取得するよ
+    <a href="http://www.utamap.com/indexkasi.html">うたマップ</a><br>
+    歌詞ページのURLを突っ込め↓<br>
+    例: http://www.utamap.com/showkasi.php?surl=37776 なら 37776<br>
+    例: http://www.utamap.com/showkasi.php?surl=<input type="text" name="name" id="txt2" size="20" value="37776">
+    <input type="button" value="歌詞を取得" onclick="getValue2('txt2');"><br>
+    ※ CORSエラーというものが起きる↓ため、<br>
+    <a href="https://yukimonkey.com/fix-error/cros1/#h2_2">CORSエラーとは？</a><br>
+    <a href="https://chrome.google.com/webstore/search/CORS?hl=ja">拡張機能</a><br>
+    この拡張機能を入れて、その後右上でAccess-Control-Allow-Origin:ON<br>
+    にすると動く※ちょっと遅いのは仕様です<br>
+    -----------------------------------------------------------------------------<br>
+    <span id="samurai">ここに出力されるよ</p>
+</body>
+</html>
