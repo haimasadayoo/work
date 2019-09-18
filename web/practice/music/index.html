@@ -1,0 +1,57 @@
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>卍俺の選曲はイケてる卍</title>
+<link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body>
+	<font size="10">ようこそ いい感じの曲貼る会へ</font><br>
+    <a href="https://teamspeak3nosyamoji.s3-ap-northeast-1.amazonaws.com/music1/add/index.html">曲を追加</a><br><br>
+    <a href="https://teamspeak3nosyamoji.s3-ap-northeast-1.amazonaws.com/music1/show/index.html">曲を表示・投票</a><br><br>
+    <a href="https://teamspeak3nosyamoji.s3-ap-northeast-1.amazonaws.com/music1/result/index.html">結果発表</a><br><br>
+    <a href="https://teamspeak3nosyamoji.s3-ap-northeast-1.amazonaws.com/music1/end/index.html">過去ログ</a><br><br>
+
+<button id="button">リセット</button>
+<script>    // ボタンの要素を取得
+    var button = document.getElementById("button");     
+    // ボタンをクリックした時の処理
+console.log("add.js start")
+    button.addEventListener("click", function(e) {
+console.log("clicked")
+    e.preventDefault();
+
+    // 入力フォームの値を取得
+    var name = "a"
+
+    function sendmail(name) {
+      return fetch('https://19b1vh5y65.execute-api.ap-northeast-1.amazonaws.com/1', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name})
+      })
+    }
+    sendmail(name)
+		alert("リセットしました")
+    });
+</script>
+
+<br>
+
+18時β版完成
+
+仕様
+データベースに書き込んだ後はデスガンが読み取り許可を出さないと曲の表示・結果発表・過去ログが開けないバグがあります(修正できるかもしれない)
+
+曲を追加直後はデータベースが不安定になり、追加されてないように見えることがあります。待ちましょう(Amazonストレージの使用だからどうしようもない)
+
+「工事中」って出てたら
+①エラー
+②データベースに何も入っていない
+可能性があります
+
+
+</body>
+</html>

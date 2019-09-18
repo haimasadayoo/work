@@ -1,0 +1,12 @@
+
+add music
+	Postで送られてきたやつでLambdaを発火
+
+get music
+	s3からjsonを持ってくる
+
+judge music
+	採点。Postで送られてきたやつでLambdaを発火
+
+resetMusic
+	過去ログに押し込むLambdaを発火

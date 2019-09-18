@@ -1,0 +1,96 @@
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>卍俺の選曲はイケてる卍</title>
+<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+曲数は <k id="k0">x</k> です<br><br>
+01: <input type="text" name="no1" id="no1" size="2" value="0"> <k id="k1">text</k><br>
+02: <input type="text" name="no2" id="no2" size="2" value="0"> <k id="k2">text</k><br>
+03: <input type="text" name="no3" id="no3" size="2" value="0"> <k id="k3">text</k><br>
+04: <input type="text" name="no4" id="no4" size="2" value="0"> <k id="k4">text</k><br>
+05: <input type="text" name="no5" id="no5" size="2" value="0"> <k id="k5">text</k><br>
+06: <input type="text" name="no6" id="no6" size="2" value="0"> <k id="k6">text</k><br>
+07: <input type="text" name="no7" id="no7" size="2" value="0"> <k id="k7">text</k><br>
+08: <input type="text" name="no8" id="no8" size="2" value="0"> <k id="k8">text</k><br>
+09: <input type="text" name="no9" id="no9" size="2" value="0"> <k id="k9">text</k><br>
+10: <input type="text" name="no10" id="no10" size="2" value="0"> <k id="k10">text</k><br>
+11: <input type="text" name="no11" id="no11" size="2" value="0"> <k id="k11">text</k><br>
+12: <input type="text" name="no12" id="no12" size="2" value="0"> <k id="k12">text</k><br>
+13: <input type="text" name="no13" id="no13" size="2" value="0"> <k id="k13">text</k><br>
+14: <input type="text" name="no14" id="no14" size="2" value="0"> <k id="k14">text</k><br>
+15: <input type="text" name="no15" id="no15" size="2" value="0"> <k id="k15">text</k><br>
+16: <input type="text" name="no16" id="no16" size="2" value="0"> <k id="k16">text</k><br>
+17: <input type="text" name="no17" id="no17" size="2" value="0"> <k id="k17">text</k><br>
+18: <input type="text" name="no18" id="no18" size="2" value="0"> <k id="k18">text</k><br>
+19: <input type="text" name="no19" id="no19" size="2" value="0"> <k id="k19">text</k><br>
+20: <input type="text" name="no20" id="no20" size="2" value="0"> <k id="k20">text</k><br>
+21: <input type="text" name="no21" id="no21" size="2" value="0"> <k id="k21">text</k><br>
+<button id="button">採点</button>
+<br>
+
+<script>
+$.ajax({
+	type: 'GET',
+	url: 'https://teamspeak3nosyamoji.s3-ap-northeast-1.amazonaws.com/music1/data.json',
+	dataType: 'json',
+	success: function(json){
+		var len = json.length;
+		document.getElementById('k'+0).innerHTML= len
+		for(var i=0; i<len; i++){
+			document.getElementById('k'+(parseInt(i)+1)).innerHTML= '<a href="'+json[i].url+'">'+json[i].name+'</a>'
+		}
+	}
+});
+</script>
+
+<script>    // ボタンの要素を取得
+    var button = document.getElementById("button");     
+    // ボタンをクリックした時の処理
+console.log("add.js start")
+    button.addEventListener("click", function(e) {
+console.log("clicked")
+    e.preventDefault();
+
+    // 入力フォームの値を取得
+    var no1 = document.getElementById("no1").value;
+    var no2 = document.getElementById("no2").value;
+    var no3 = document.getElementById("no3").value;
+    var no4 = document.getElementById("no4").value;
+    var no5 = document.getElementById("no5").value;
+    var no6 = document.getElementById("no6").value;
+    var no7 = document.getElementById("no7").value;
+    var no8 = document.getElementById("no8").value;
+    var no9 = document.getElementById("no9").value;
+    var no10 = document.getElementById("no10").value;
+    var no11 = document.getElementById("no11").value;
+    var no12 = document.getElementById("no12").value;
+    var no13 = document.getElementById("no13").value;
+    var no14 = document.getElementById("no14").value;
+    var no15 = document.getElementById("no15").value;
+    var no16 = document.getElementById("no16").value;
+    var no17 = document.getElementById("no17").value;
+    var no18 = document.getElementById("no18").value;
+    var no19 = document.getElementById("no19").value;
+    var no20 = document.getElementById("no20").value;
+    var no21 = document.getElementById("no21").value;
+console.log(no1)
+
+    function sendmail(no1,no2,no3,no4,no5,no6,no7,no8,no9,no10,no11,no12,no13,no14,no15,no16,no17,no18,no19,no20,no21) {
+      return fetch('https://and3i76zf3.execute-api.ap-northeast-1.amazonaws.com/1', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({no1,no2,no3,no4,no5,no6,no7,no8,no9,no10,no11,no12,no13,no14,no15,no16,no17,no18,no19,no20,no21})
+      })
+    }
+    sendmail(no1,no2,no3,no4,no5,no6,no7,no8,no9,no10,no11,no12,no13,no14,no15,no16,no17,no18,no19,no20,no21)
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>曲追加</title>
+  </head>
+  <body>
+名前
+<input type="text" name="name" id="name" size="20" value=""><br><br>
+曲名 URL<br>
+1: <input type="text" name="no1" id="no1" size="10" value=""> <input type="text" name="nu1" id="nu1" size="50" value=""><br>
+2: <input type="text" name="no2" id="no2" size="10" value=""> <input type="text" name="nu2" id="nu2" size="50" value=""><br>
+3: <input type="text" name="no3" id="no3" size="10" value=""> <input type="text" name="nu3" id="nu3" size="50" value=""><br>
+<br>
+<button id="button">君に決めた</button>
+
+<script>    // ボタンの要素を取得
+    var button = document.getElementById("button");     
+    // ボタンをクリックした時の処理
+console.log("add.js start")
+    button.addEventListener("click", function(e) {
+console.log("clicked")
+    e.preventDefault();
+
+    // 入力フォームの値を取得
+    var name = document.getElementById("name").value;
+
+    var no1 = document.getElementById("no1").value;
+    var no2 = document.getElementById("no2").value;
+    var no3 = document.getElementById("no3").value;
+console.log("name:"+name)
+console.log("no1:"+no1)
+console.log("no2:"+no2)
+console.log("no3:"+no3)
+    var nu1 = document.getElementById("nu1").value;
+    var nu2 = document.getElementById("nu2").value;
+    var nu3 = document.getElementById("nu3").value;
+console.log("nu1:"+nu1)
+console.log("nu2:"+nu2)
+console.log("nu3:"+nu3)
+
+    function sendmail(name,no1,no2,no3,nu1,nu2,nu3) {
+      return fetch('https://1ip2styy1k.execute-api.ap-northeast-1.amazonaws.com/test/submit', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name,no1,no2,no3,nu1,nu2,nu3})
+      })
+    }
+    sendmail(name,no1,no2,no3,nu1,nu2,nu3)
+		alert("書き込みが完了しました。")
+    });
+</script>
+</body>
+</html>
