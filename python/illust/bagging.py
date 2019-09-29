@@ -6,7 +6,7 @@ import math
 ### setting start ###
 depth=300    # number of machine
 number=500   # number of sample
-typeg=2      # shape of answer 1=circle 2=trident 3=square
+typeg=2     # shape of answer 1=circle 2=trident 3=square
 ### setting end ###
 
 
@@ -140,10 +140,24 @@ def print_data(x,y,label,number,a,b,c,d,s):
 def calcR(a,b,c,x,y,label,weight,number):
     sums=0
     for i in range(number):
-        sums= sums + ( 0.5* weight[i] ) * (1- (weak (a,b,c,x[i],y[i]) * label[i] ) )
+        temp=weak(a,b,c,x[i],y[i])
+        if(temp==1 and label[i]==1):
+            sums-=5
+        elif(temp==-1 and label[i]==-1):
+            sums-=1
+        else:
+            sums+=1
+        
     return sums
 
-def argR(x,y,label,weight,number):
+def argR(train_x,train_y,label,weight,number):
+    x=[]
+    y=[]
+    for i in range(number):
+        temp=random.randint(0,number-1)
+        x.append(train_x[temp])
+        y.append(train_y[temp])
+        
     mina=0
     minb=0
     minc=0
@@ -161,16 +175,10 @@ def argR(x,y,label,weight,number):
                     mini=res
     return mina,minb,minc,mini
 
-def weight_update(x):
-    if(x==0):
-        return 0.01
-    sita=1/2*math.log((1-x)/x)
-    return sita
-
 def function(a,b,c,d,s,x,y):
     res=0
     for i in range(d):
-        res+=s[i]*weak(a[i],b[i],c[i],x,y)
+        res+=weak(a[i],b[i],c[i],x,y)
     return res
 
 # abc: machine data
@@ -179,18 +187,7 @@ def function(a,b,c,d,s,x,y):
 # label: (x,y)data's answer
 # number: number of sample
 
-def weight_updates(a,b,c,d,s,label,number,x,y):
-    res=[]
-    total=0
-    for i in range(number):
-        temp=math.exp(-1*function(a,b,c,d,s,x[i],y[i])*label[i])
-        res.append(temp)
-        total+=temp
-    for i in range(number):
-        res[i]=res[i]/total
-    return res
-
-def testing(a,b,c,d,s):
+def testing(a,b,c,d,s,g):
     x=[]
     y=[]
     tp=0
@@ -200,10 +197,34 @@ def testing(a,b,c,d,s):
     for i in range(1000):
         x=random.random()*4
         y=random.random()*4
-        if((x-2)*(x-2)+(y-2)*(y-2)<=1):
-            answer=1
-        else:
-            answer=-1
+        # shape of answer 1=circle 2=trident 3=square
+        if(g==1):
+            if((x-2)*(x-2)+(y-2)*(y-2)<=1):
+                answer=1
+            else:
+                answer=-1
+        elif(g==2):
+            if( 1<x and x<=2 and 1<y and y<=3):
+                if(y<2*x-1):
+                    answer=1
+                else:
+                    answer=-1
+            elif( 2<x and x <3 and 1<y and y<3):
+                if(y<-2*x+7):
+                    answer=1
+                else:
+                    answer=-1
+            else:
+                answer=-1
+        elif(g==3):
+            if(1<x and x< 3 and 1<y and y<3):
+                answer=1
+            else:
+                answer=-1
+
+
+            
+                
         predict=function(a,b,c,d,s,x,y)
        
         if(0<=predict):
@@ -238,9 +259,6 @@ def testing(a,b,c,d,s):
     print("Precision: "+str(Pre))
     print("Recall: "+str(Rec))
     print("F: "+str(F))            
-        
-
-
 ### initialize start ###
 As=[]    # instance of machine
 Bs=[]    # same
@@ -255,18 +273,16 @@ for i in range(depth):
     if(i%10==0 and i!=0):
         print("")
         print(i)
-        testing(As,Bs,Cs,i,Citas)
+        testing(As,Bs,Cs,i,Citas,typeg)
     tempa,tempb,tempc,tempi=argR(train_x,train_y,train_label,point_weight,number)
     As.append(tempa)
     Bs.append(tempb)
     Cs.append(tempc)
-    Citas.append(weight_update(tempi))
-    point_weight=weight_updates(As,Bs,Cs,i,Citas,train_label,number,train_x,train_y)
 print("")
 print("result")
-testing(As,Bs,Cs,depth,Citas)
+testing(As,Bs,Cs,depth,Citas,typeg)
 print("")
 print("generating image...")
-print_data(train_x,train_y,train_label,number,As,Bs,Cs,depth,Citas)
+#print_data(train_x,train_y,train_label,number,As,Bs,Cs,depth,Citas)
 
 print("done!")
