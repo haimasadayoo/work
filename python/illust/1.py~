@@ -1,0 +1,174 @@
+import random
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+import copy
+
+#a 1st: 0 or 1
+#  0: x=
+#  1: y=
+#b 2nd: 0-6
+#c 3rd 0 or 1
+#  0: under or equal
+#  1: over 
+#x 4th: x
+#y 5th: y
+
+# return: 1 or -1
+# 1:true
+# 2:false
+
+def weak(a,b,c,x,y):
+    temp=0
+    if(a==0):
+        if(x<b or x==b):
+            if(c==0): 
+                temp= 1
+            else: 
+                temp= -1
+        elif(c==0): 
+            temp= -1
+        else: 
+            temp= 1
+    else:
+        if(y<b or y==b):
+            if(c==0):
+                temp= 1
+            else:
+                temp= -1
+        elif(c==0):
+            temp= -1
+        else:
+            temp= 1
+    return temp
+
+def train_data(number):
+    x=[]
+    y=[]
+    label=[]
+    weight=[]
+    for i in range(number):
+        xtemp=random.random()*4
+        ytemp=random.random()*4
+        x.append(xtemp)
+        y.append(ytemp)
+        if((xtemp-2)*(xtemp-2)+(ytemp-2)*(ytemp-2)<=1):
+            label.append(1)
+        else:
+            label.append(-1)
+        weight.append(1/number)
+    x=np.array(x)
+    y=np.array(y)
+    return x,y,label,weight
+
+def print_data(x,y,label,number,a,b,c,d,s):
+    for i in range(number):
+        if(label[i]==1):
+            plt.scatter(x[i], y[i],color="r")
+        else:
+            plt.scatter(x[i], y[i],color="b")
+    """
+    for i in range(40):
+        for j in range(40):
+            ia=i/10
+            ja=j/10
+            if(function(a,b,c,d,s,ia,ja)<0):
+                plt.scatter(ia, ja,color="c",s=10)
+            else:
+                plt.scatter(ia, ja,color="m",s=10)
+    """
+            
+    plt.show()
+
+def calcR(a,b,c,x,y,label,weight,number):
+    sums=0
+    for i in range(number):
+        sums= sums + (1/2*weight[i])*(1-(weak(a,b,c,x[i],y[i]) * label[i] ) )
+        #print(str(sums))
+    #print("sums return:"+str(sums))
+    #print("a:"+str(a)+" b:"+str(b)+" c:"+str(c)+" sums"+str(sums))
+    return sums
+
+def argR(x,y,label,weight,number):
+    mina=0
+    minb=0
+    minc=0
+    mini=800
+
+    for a in range(2):
+        for c in range(2):
+            for bj in range(400):
+                b=bj/100
+                res=calcR(a,b,c,x,y,label,weight,number)
+                #print(str(res)+" vs "+str(mini))
+                if(res<mini):
+                    #print("best value changed! mini:"+str(mini)+" res:"+str(res))
+                    mina=a
+                    minb=b
+                    minc=c
+                    mini=res
+    #print("best: a:"+str(mina)+" b:"+str(minb)+" c:"+str(minc)+" value:"+str(mini))
+    return mina,minb,minc,mini
+
+def weight_update(x):
+    if(x==0):
+        return 0.01
+    sita=1/2*math.log((1-x)/x)
+    return sita
+
+def function(a,b,c,d,s,x,y):
+    #print("")
+    #print("function")
+    #print("")
+    #print(a,b,c,d,s,x,y)
+    res=0
+    for i in range(d):
+        res+=s[i]*weak(a[i],b[i],c[i],x,y)
+    return res
+
+# abc: machine data
+# d: depth
+# s: cita
+# label: (x,y)data's answer
+# number: number of sample
+
+def weight_updates(a,b,c,d,s,label,number,x,y):
+    #print("")
+    #print("weight_updates")
+    #print("")
+    #print(a,b,c,d,s,label,number,x,y)
+    res=[]
+    total=0
+    for i in range(number):
+        temp=math.exp(-1*function(a,b,c,d,s,x[i],y[i])*label[i])
+        res.append(temp)
+        total+=temp
+    for i in range(number):
+        res[i]=res[i]/total
+    return res
+
+### initialize start ###
+depth=3000 # number of machine
+As=[]    # instance of machine
+Bs=[]    # same
+Cs=[]    # same
+Citas=[] # [depth.length]
+number=10# number of sample
+
+# initialize data set
+train_x,train_y,train_label,point_weight=train_data(number)
+
+### initialize end ###
+weight=[]
+for i in range(depth):
+    if(i!=0):
+        print("A: "+str(As[i-1])+" B:"+str(Bs[i-1])+" C:"+str(Cs[i-1]))
+        print(i)
+    tempa,tempb,tempc,tempi=argR(train_x,train_y,train_label,point_weight,number)
+    As.append(tempa)
+    Bs.append(tempb)
+    Cs.append(tempc)
+    Citas.append(weight_update(tempi))
+    #print(As,Bs,Cs)
+    weight=weight_updates(As,Bs,Cs,i,Citas,train_label,number,train_x,train_y)
+print_data(train_x,train_y,train_label,number,As,Bs,Cs,depth,Citas)
