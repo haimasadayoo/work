@@ -5,8 +5,9 @@ import math
 
 ### setting start ###
 depth=300    # number of machine
-number=500   # number of sample
+number=3000   # number of sample
 typeg=2      # shape of answer 1=circle 2=trident 3=square
+numtest=1000
 ### setting end ###
 
 
@@ -189,15 +190,11 @@ def weight_updates(a,b,c,d,s,label,number,x,y):
     for i in range(number):
         res[i]=res[i]/total
     return res
-
-def testing(a,b,c,d,s,g):
-    x=[]
-    y=[]
-    tp=0
-    fp=0
-    fn=0
-    tn=0
-    for i in range(1000):
+def test_data(num,g):
+    test_x=[]
+    test_y=[]
+    label=[]
+    for i in range(num):
         x=random.random()*4
         y=random.random()*4
         if(g==1):
@@ -223,19 +220,26 @@ def testing(a,b,c,d,s,g):
                 answer=1
             else:
                 answer=-1
+        test_x.append(x)
+        test_y.append(y)
+        label.append(answer)
+    return test_x,test_y,label
 
 
-
-        
-        predict=function(a,b,c,d,s,x,y)
-       
+def testing(a,b,c,d,s,x,y,answer,num):
+    tp=0
+    fp=0
+    fn=0
+    tn=0
+    for i in range(num):
+        predict=function(a,b,c,d,s,x[i],y[i])
         if(0<=predict):
-            if(answer==1):
+            if(answer[i]==1):
                 tp+=1
             else:
                 fp+=1
         else:
-            if(answer==1):
+            if(answer[i]==1):
                 fn+=1
             else:
                 tn+=1
@@ -270,15 +274,25 @@ Bs=[]    # same
 Cs=[]    # same
 Citas=[] # [depth.length]
 
+# print settings
+print("depth(number of weak devider): "+str(depth))
+print("number(number of train data ): "+str(number))
+if(typeg==1):
+    print("answer shape: circle ○")
+elif(typeg==2):
+    print("asnwer shape: trident △")
+elif(typeg==3):
+    print("answer shape: square □")
+print("number of test data: "+str(numtest))
 # initialize data set
 train_x,train_y,train_label,point_weight=train_data(number,typeg)
-
+t_x,t_y,t_label=test_data(numtest,typeg)
 ### initialize end ###
 for i in range(depth):
     if(i%10==0 and i!=0):
         print("")
         print(i)
-        testing(As,Bs,Cs,i,Citas,typeg)
+        testing(As,Bs,Cs,i,Citas,t_x,t_y,t_label,numtest)
     tempa,tempb,tempc,tempi=argR(train_x,train_y,train_label,point_weight,number)
     As.append(tempa)
     Bs.append(tempb)
@@ -287,7 +301,7 @@ for i in range(depth):
     point_weight=weight_updates(As,Bs,Cs,i,Citas,train_label,number,train_x,train_y)
 print("")
 print("result")
-testing(As,Bs,Cs,depth,Citas,typeg)
+testing(As,Bs,Cs,depth,Citas,t_x,t_y,t_label,numtest)
 print("")
 print("generating image...")
 #print_data(train_x,train_y,train_label,number,As,Bs,Cs,depth,Citas)
